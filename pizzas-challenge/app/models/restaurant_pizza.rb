@@ -1,6 +1,6 @@
 class RestaurantPizza < ApplicationRecord
     belongs_to :restaurant
-    belongs_to :pizzas
-    
+    belongs_to :pizza
+
 
 end
