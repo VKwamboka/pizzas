@@ -1,4 +1,8 @@
 class RestaurantsController < ApplicationController
+
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+  rescue_from ActiveRecord::RecordInvalid, with: :create_error
+
      # GET /restaurant
   def index
     restaurants = Restaurant.all
@@ -8,23 +12,20 @@ class RestaurantsController < ApplicationController
   # GET /restaurant/:id
   def show
     restaurant = find_restaurant
-    if restaurant
-      render json: restaurant, include: :pizzas
-    else
-      not_found
-    end
+    render json: restaurant, include: :pizzas
+  end
+
+  # create restaurant
+  def create
+    respizza = Restaurant.create!(restaurant_param)
+    render json: respizza,  status: 201
   end
 
   # destroy restaurant
   def destroy
     restaurant = find_restaurant
-    if restaurant
-      restaurant.destroy
-      head :no_content
-      else
-        not_found
-    end
-  
+    restaurant.destroy
+    head :no_content
   end
 
   private 
@@ -34,11 +35,15 @@ class RestaurantsController < ApplicationController
   end
   
   def render_not_found_response
-    render json: { error: "Pizza not found" }, status: 404
+    render json: { error: "Restaurant not found" }, status: 404
   end
 
   def create_error
     render json: { error:  ["validation errors"]}, status: 422
+  end
+
+  def restaurant_param
+    params.permit(:name, :address)
   end
 
 end

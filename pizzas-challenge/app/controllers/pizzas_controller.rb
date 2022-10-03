@@ -8,6 +8,7 @@ class PizzasController < ApplicationController
     render json: pizzas
   end
 
+  # create pizza
   def create
     pizza = Pizza.create(pizza_params)
     render json: pizza, status: 201
