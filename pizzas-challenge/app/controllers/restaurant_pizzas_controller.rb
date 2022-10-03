@@ -1,4 +1,14 @@
 class RestaurantPizzasController < ApplicationController
+
+  def show
+    restaurantpizza = find_restaurantpizza
+    if restaurantpizza
+      render json: restaurantpizza, include: :pizzas
+    else
+      not_found
+    end
+  end
+  
     def destroy
         restaurantpizza = find_restaurantpizza
         restaurantpizza.destroy
@@ -8,7 +18,7 @@ class RestaurantPizzasController < ApplicationController
     def create
       respizza = RestaurantPizza.create!(restaurantpizza_params)
       if respizza
-        render json: respizza, status: 201
+        render json: respizza,  status: 201
       else
         render json: { error:  ["validation errors"]}, status: 422
       end
