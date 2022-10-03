@@ -30,11 +30,15 @@ class RestaurantsController < ApplicationController
   private 
 
   def find_restaurant
-    Restaurant.find_by(id: params[:id])
+    Restaurant.find(params[:id])
   end
   
-  def not_found
-    render json: { error: "Restaurant not found" }, status: 404
+  def render_not_found_response
+    render json: { error: "Pizza not found" }, status: 404
+  end
+
+  def create_error
+    render json: { error:  ["validation errors"]}, status: 422
   end
 
 end
